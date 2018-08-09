@@ -63,7 +63,10 @@ One method that has proven to be successful to predict such parameter is machine
 \section{Mathematical Notation}
 The ultimate goal of this research is to minimize the execution time of a parallel loop. Here is an example of a hpx for loop. 
 
-code example goes there
+\begin{figure*}[h]
+	\centering
+	\includegraphics[scale=0.8]{images/for_each_call.pdf}
+\end{figure*}
 
 In such loops, a lambda function is applied over a range. The lambda function could be any algorithm like matrix multiplication per example. Each instance of a loop being run will be refered to as an experiment. Each experiment has an unique set of features which will be called $X_i$ for the $i$th experiment. The following 6 features are used:
 
@@ -99,7 +102,7 @@ The  value $cs_i$ is known as optimal chunk size as it minimizes the execution t
 The objective is to use machine-learning algorithms to approximate the function f expressed in (1).
 
 \section{Data Description}
-The data that must be generated is comprised of features and target values. $(X_i,cs_i) \, \, \, \forall i$. To generate different features, one needs to use multiple lambda functions anfd apply then on different ranges.
+The data that must be generated is comprised of features and target values. $(X_i,cs_i) \, \, \, \forall i$. To generate different features, one needs to use multiple lambda functions and apply then on different ranges.
 
 In practice, how does one find the target value for an experiment? We can find the target value $cs_i$ by applying equation [1], but finding the minima is impossible since the set $CS$ of all possible chunk sizes is very large. The idea that was used in [0] was to restrict $CS$ to a small set
 $CS=\{0.001;0.01;0.1;0.5\}$. Each value in the set is refered to as a candidate. Having a small set means that you dont have the absolute best chunk size but an approximation of it. Even though its an approximation it will still be refered as $cs_i$
@@ -113,7 +116,7 @@ Here is an example of a data-set comprised of three different experiments and $C
 
 \begin{figure*}[h]
 	\centering
-	\includegraphics[scale=0.45]{screenshot.png}
+	\includegraphics[scale=0.45]{images/screenshot_data.png}
 \end{figure*}
 
 
@@ -121,12 +124,12 @@ Here is a pseudo code of how the data is generated.
 
 \begin{figure*}[h]
 	\centering
-	\includegraphics[scale=0.49]{pseudo-code.png}
+	\includegraphics[scale=0.49]{images/pseudo-code.png}
 \end{figure*}
 \section{Data Analysis}
 
 \subsection{Matrix Multiplication}
-In this section, I will focus on the Matrix Multiplication algorithm. All experiments shown will have been run with a matrix multiplication lambda function in a HPX for-loop. The goal is to start analyzing a smaller data-set before slowly expanding it by adding new lambda functions. In the case of a matrix multiplication algorithm the feature <Input-size> can be renamed <Matrix Size>.
+In this section, I will focus on the Matrix Multiplication algorithm. All experiments shown will have been run with a matrix multiplication lambda function in a HPX $for_each()$ The goal is to start analyzing a smaller data set before slowly expanding it by adding new lambda functions. In the case of a matrix multiplication algorithm the feature <Input-size> can be renamed <Matrix Size>.
 
 \subsubsection{Variance of execution times for a given chunk-size}
 For a given experiment, you expect to get similar execution times for a given chunk size value every time you run it. There will always be some noise in the data since there are many processes that the user cannot directly control. To correct that, every for-loop is run $N_{rep}$ times and the execution time is given by the mean of these repetitions. Each repetition can be represented by an index $j=0,1,2,3,4,...$.So for an experiment $i$ the execution time outputed is 
@@ -141,47 +144,47 @@ To test this assertion, the relative variance of the mean of execution times has
 	\centering
 	\begin{subfigure}[b]{0.475\textwidth}
 		\centering
-		\includegraphics[width=\textwidth]{rel_var_100_2.png}
+		\includegraphics[width=\textwidth]{images/relvar_100_2.pdf}
 		\caption[Network2]%
 		{{\small 100x100 on 2 threads}}    
 	\end{subfigure}
 	\hfill
 	\begin{subfigure}[b]{0.475\textwidth}  
 		\centering 
-		\includegraphics[width=\textwidth]{rel_var_500_2.png}
+		\includegraphics[width=\textwidth]{images/relvar_500_2.pdf}
 		\caption[]%
 		{{\small 500x500 on 2 threads}}    
 	\end{subfigure}
 	\vskip\baselineskip
 	\begin{subfigure}[b]{0.475\textwidth}   
 		\centering 
-		\includegraphics[width=\textwidth]{rel_var_100_4.png}
+		\includegraphics[width=\textwidth]{images/relvar_100_4.pdf}
 		\caption[]%
 		{{\small 100x100 on 4 threads}}    
 	\end{subfigure}
 	\quad
 	\begin{subfigure}[b]{0.475\textwidth}   
 		\centering 
-		\includegraphics[width=\textwidth]{rel_var_500_4.png}
+		\includegraphics[width=\textwidth]{images/relvar_500_4.pdf}
 		\caption[]%
 		{{\small 500x500 on 4 threads}}    
 	\end{subfigure}
 	\vskip\baselineskip
 	\begin{subfigure}[b]{0.475\textwidth}   
 		\centering 
-		\includegraphics[width=\textwidth]{rel_var_100_8.png}
+		\includegraphics[width=\textwidth]{images/relvar_100_8.pdf}
 		\caption[]%
 		{{\small 100x100 on 8 threads}}    
 	\end{subfigure}
 	\quad
 	\begin{subfigure}[b]{0.475\textwidth}   
 		\centering 
-		\includegraphics[width=\textwidth]{rel_var_500_8.png}
+		\includegraphics[width=\textwidth]{images/relvar_500_8.pdf}
 		\caption[]%
 		{{\small 500x500 on 8 threads}}    
 \end{subfigure}
 	\caption[Standard deviations]
-	{\small Variances of the mean of execution times for different experiments  and different chunk sizes on Matrix Multiplication} 
+	{\small Variances of the mean of execution times for different experiments  and different chunk sizes on Matrix Multiplication algorithm} 
 
 \end{figure*}
 \newpage
@@ -189,7 +192,7 @@ From this analysis, we can see that in most cases for a 100x100 matrix the varia
 
 \subsubsection{Variations of optimal chunk size for a given experiment}
 
-Now that it has been demonstrated that you can accurately measure execution time by having more and more repetitions, one would expect the optimal chunk size to be the same each time you run the same experiment. This is important because the goal of the project is to predict the optimal chunk-size based on the features of a loop. If you run an experiment twice and get 2 different optimal chunk sizes, than it would mean that there is no function $$f:\{X_i\} \rightarrow cs_i$$ 
+Now that it has been demonstrated that you can accurately measure execution time by having more and more repetitions, one would expect the optimal chunk size to be the same each time you run the same experiment. This is important because the goal of the project is to predict the optimal chunk-size based on the features of a loop. If you run an experiment twice and get different optimal chunk sizes, than it would mean that there is no function $$f:\{X_i\} \rightarrow cs_i$$ 
 
  . It is important to be sure that such a function can exist because this is the function that will be approximated with machine learning. To analyze the variations in optimal chunk size, the same experiments as previous section have been run. Chunk sizes of \{0.01,0.05,0.1,0.5\} have once again been used on loops with 100 and 500 iterations with 2,4 and 8 threads. Here are the optimal chunk sizes for each experiment.Each collumn represents an experiment and each row represents a repetition on the given experiment.
 \begin{table}[H]
@@ -214,7 +217,7 @@ Now that it has been demonstrated that you can accurately measure execution time
 	\end{tabular}
 \end{table}
 
-As we can see there are some variations in optimal chunk size when you run the same experiment different times and therefore we are not guaranteed to find the same target values when re-generating data. However, for these tests, we can clearly identify a value for chunk size that is selected more often than the other values. To conclude, the function $f$ does seem to exist but we can also observe some background noise.
+As we can see there are some variations in optimal chunk size when you run the same experiment different times and therefore we are not guaranteed to find the same target values when re-generating data. However, for these tests, we can clearly identify a value for chunk size that is selected more often than the other values. To conclude, the function $f$ does seem to exist but with some background noise.
 
 \subsubsection{Comparison of executions times for all chunk size candidates}
 As seen previously, when you run the same experiment multiple times, there is some variation in the optimal chunk size obtained. To understand this in more details, I decided to analyze the variations of execution times with respect to different chunk size candidates.
@@ -232,8 +235,8 @@ Here the variance is shown using a color map.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=100mm]{var_chunk_sizes.png}
-	\caption{Variance of execution times as a function of features}
+	\includegraphics[width=100mm]{images/var_chunk_sizes.pdf}
+	\caption{Variance of execution times as a function of features on Matrix Multiplication algorithm}
 \end{figure}
 
  It would seem, according to this result, that when you add more threads and more iterations, the more variations you observe when measuring execution time for different chunk-sizes. However there is a problem with this result, the execution times are not all on the same scale. In fact the more iterations you have, the bigger the execution time. In that case, the execution time ranges from 0.005 to 2 seconds depending on the experiment. To solve this problem, the relative variance must once again be used. 
@@ -242,14 +245,13 @@ Here is a plot of the relative variance for all the same experiments:
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=100mm]{rel_var_chunk_sizes.png}
-	\caption{Relative Variance (\%) of execution times as a funciton of features}
+	\includegraphics[width=100mm]{images/rel_var_chunk_sizes.pdf}
+	\caption{Relative Variance (\%) of execution times as a function of features on Matrix Multiplication algorithm}
 \end{figure}
--How to best choose candidates ...
 
 As we can see, the relative variance depends highly on the number of threads. It appears that the lowest variance is obtained when using only one threads which makes sense since 1 thread is equivalent to sequential execution. Therefore, it has been decided that the number of threads would never be put to 1 because of the low relative variance between execution times. We can also see that by adding more threads, we add more variances in the execution times because an efficient use of these threads results in a significantly smaller execution time.
 
-CONCLUSION 1: The more threads you have, the more variance in time you observe and therefore, the choice of the right chunk size becomes more crutial.
+OBSERVATION 1: The more threads you have, the more variance in time you observe and therefore, the choice of the right chunk size becomes more crutial.
 \subsubsection{Function analysis}
 In this section, the focus will be on analyzing the function that will be approximated by machine learning
 
@@ -258,20 +260,13 @@ $$f:\{X_i\} \rightarrow cs_i$$
 The data used to visualize this function is comprised 64 experiments of matrix multiplication with 100,200,300,400, 500,600,700,800 iterations and 1,2,4,6,8,10,12,14 threads. The chunk sizes candidates were $CS=\{0.005; 0.01 ;0.05; 0.1; 0.2; 0.5\}$
 
 First of all, it is important to note that since when generating data with only a matrix multiplication function, the features <Number of Operations> <Number of Float Operations> and <Number of Comparison Operations> are a polynomial function of <Number of Iterations>
-Here is an example where a second degree polynomial can be fitted with no error:
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=100mm]{polynomial_fit.png}
-	\caption{Optimal Chunk Size with respect to Number of iterations and threads}
-\end{figure}
 
 This means that of all 6 features, only 2 can be used (Deepest loop level is not necessary because it is the same for each matrix multiplication experiment). Here is a punctual color-map of the function with the current data.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=120mm]{function_top_view_first.png}
-	\caption{Optimal chunk size as a function of features}
+	\includegraphics[width=120mm]{images/chunk_size_function_matrix.pdf}
+	\caption{Optimal chunk size as a function of features on Matrix Multiplication algorithm}
 \end{figure}
 
 Number of threads has an impact on optimal chunk size For 100 iterations where we can see a steady decrease of chunk size with respect to number of treads. However for bigger matrices, the function oscillates. These oscillations are caused by the fact that execution times between 0.005 and 0.01 are very close. Here is a table of some execution times to show my point. (Note 0.2 was remove because it was never selected)
@@ -307,17 +302,17 @@ The first approach was to use bigger matrices of sizes:
 100,200,400,600,800,1000,1500,
 2000,2500 with chunk-size candidates $CS=\{0.0005;0.001; 0.005; 0.01; 0.05; 0.1;0.5\}$
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=120mm]{function_big.png}
-	\caption{Optimal Chunk Size as a function of features for bigger matrices}
-\end{figure}
+%\begin{figure}[H]
+%	\centering
+%	\includegraphics[width=120mm]{}
+%	\caption{Optimal Chunk Size as a function of features on Matrix Multiplication algorithm with bigger matrices}
+%\end{figure}
 
 We still observe oscillations so I decided to examine the execution times once more.
 
 \begin{table}[h]
 	\centering
-	\caption{Execution times for 1000x1000, 1500x1500, 2000x2000 and 2500x2500}
+	\caption{Execution times for 1000x1000, 1500x1500, 2000x2000 and 2500x2500 Matrices}
 	\label{my-label}
 	\begin{tabular}{|c|c|c|c|c|c|c|}
 		\hline
@@ -343,14 +338,14 @@ Here is for small matrices
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=120mm]{function_uniform_log.png}
+	\includegraphics[width=120mm]{images/chunk_size_function_matrix_uniform_log.pdf}
 	\caption{Optimal Chunk Size as a function of features with a set $CS$ uniform on logscale}
 \end{figure}
 
 And for bigger matrices
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=120mm]{function_big_uniform_log.png}
+	\includegraphics[width=120mm]{images/chunk_size_function_matrix_uniform_log_big.pdf}
 	\caption{Optimal Chunk Size as a function of features on bigger matrices with a set $CS$ uniform on logscale }
 \end{figure}
 
@@ -358,14 +353,22 @@ that result is very encouraging, We can see some reduction of the oscillations. 
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=120mm]{function_uniform_50.png}
+	\includegraphics[width=120mm]{images/chunk_size_function_matrix_uniform_log_50rep.pdf}
 	\caption{Optimal Chunk Size as a function of features with a set $CS$ uniform on logscale and 50 repetitions}
 \end{figure}
 
 This result is closer to what you would expect, the more threads and the bigger the Matrix, the more advantageous it becomes to split your job in many chunks. There is still some noise but it is unavoidable at this point. At least we can reduce it by changing the set of candidates.
 \subsection{1D Stenctil algorithm}
 
-...
+Another algorithm that was studied individually was 1D Stencil algorithm. It was studied because of its simplicity which make it different from Matrix Multiplication. Here the features <input size> can be renamed <vector size> since the 1D stencil is applied on a vector.
+\subsubsection{Comparison of executions times for all chunk size candidates}
+
+\subsubsection{Function Analysis}
+\begin{figure*}[h]
+	\centering
+	\includegraphics[scale=0.8]{images/stencil_function.pdf}
+\end{figure*}
+That result is very interesting because we really see a different behaviour than with matrix Multiplication.
 
 
 \subsection{Data Set with many functions}
@@ -435,13 +438,13 @@ By using this metric, we can see that the k-Nearest-Neighbors and the Random For
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=120mm]{KNNR_eval.png}
+	\includegraphics[width=120mm]{images/KNNR_eval.png}
 	\caption{k-Nearest-Neighbors predictions vs reality using cross validation with 10 subsets }
 \end{figure}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=120mm]{RFR_eval.png}
+	\includegraphics[width=120mm]{images/RFR_eval.png}
 	\caption{Random forest predictions vs reality using cross validation with 10 subsets }
 \end{figure}
 
@@ -468,14 +471,14 @@ Here we can see that both algorithm regression have similar execution times. In 
 	\centering
 	\begin{subfigure}[b]{0.515\textwidth}
 		\centering
-		\includegraphics[width=\textwidth]{matrix_mult_prediction_bars.png}
+		\includegraphics[width=\textwidth]{images/matrix_mult_prediction_bars.png}
 		\caption[Network2]%
 		{{Chunk sizes}}    
 	\end{subfigure}
 	\hfill
 	\begin{subfigure}[b]{0.475\textwidth}  
 		\centering 
-		\includegraphics[width=\textwidth]{matrix_mult_times_bars.png}
+		\includegraphics[width=\textwidth]{images/matrix_mult_times_bars.png}
 		\caption[]%
 		{{HPX loops execution times}}    
 	\end{subfigure}
@@ -507,14 +510,14 @@ This missclassification can be manually corrected after the multinomial classifi
 	\centering
 	\begin{subfigure}[b]{0.5\textwidth}
 		\centering
-		\includegraphics[width=\textwidth]{matrix_mult_corrected_predictions_bar.png}
+		\includegraphics[width=\textwidth]{images/matrix_mult_corrected_predictions_bar.png}
 		\caption[Network2]%
 		{{Chunk sizes}}    
 	\end{subfigure}
 	\hfill
 	\begin{subfigure}[b]{0.49\textwidth}  
 		\centering 
-		\includegraphics[width=\textwidth]{matrix_mult_corrected_times_bar.png}
+		\includegraphics[width=\textwidth]{images/matrix_mult_corrected_times_bar.png}
 		\caption[]%
 		{{HPX loops execution times}}    
 	\end{subfigure}
@@ -550,14 +553,14 @@ Here we can note that by manually reducing the aberant chunk sizes has improved 
 	\centering
 	\begin{subfigure}[b]{0.5\textwidth}
 		\centering
-		\includegraphics[width=\textwidth]{stencil_predictions_bars.png}
+		\includegraphics[width=\textwidth]{images/stencil_predictions_bars.png}
 		\caption[Network2]%
 		{{Chunk sizes}}    
 	\end{subfigure}
 	\hfill
 	\begin{subfigure}[b]{0.49\textwidth}  
 		\centering 
-		\includegraphics[width=\textwidth]{stencil_times_bars.png}
+		\includegraphics[width=\textwidth]{images/stencil_times_bars.png}
 		\caption[]%
 		{{HPX loops execution times}}    
 	\end{subfigure}
@@ -580,13 +583,13 @@ Here on the big data set, the Mean Square Error has once again been measured on 
 \end{table}
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=120mm]{KNNR_eval_big.png}
+	\includegraphics[width=120mm]{images/KNNR_eval_big.png}
 	\caption{Evaluation of Nearest-Neighbors with 2 neighbors}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=120mm]{RFR_eval_big.png}
+	\includegraphics[width=120mm]{images/RFR_eval_big.png}
 	\caption{Evaluation of random forest}
 \end{figure}
 
@@ -602,17 +605,13 @@ Now let's see how this error in prediction relates to execution times. Once agai
 	\begin{tabular}{|c|c|c|c|}
 		\hline
 		& K-Nearest-Neighbors & Random Forest &Multinomial Classification\\ \hline
-		k=10  & 352+-3.5        & 341+- 3.6&344+-4.2 \\ \hline
+		k=10  & 355+-4        & 344+- 4&459+-4 \\ \hline
 	\end{tabular}
 \end{table}
 
 We can once again see that kNN is not doing great which is not surprising considering the big MSE is provided. Random Forest is slightly faster than Multinomial Classification but not by a significant ammount as the two intervals of confidences are supperposed.
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=150mm]{time_bigdata_rfr_vs_multinomial.png}
-	\caption{...}
-\end{figure}
+
 Once again, we see that the Classification predicted 0.5 when the best chunk size was smaller. The Multinomial Classification Corrected can once again be used:
 
 \begin{table}[h]
@@ -622,7 +621,7 @@ Once again, we see that the Classification predicted 0.5 when the best chunk siz
 	\begin{tabular}{|c|c|c|c|}
 		\hline
 		& K-Nearest-Neighbors & Random Forest &Multinomial Classification Corrected\\ \hline
-		k=10  & 352+-3.5        & 341+- 3.6&342+-3.56 \\ \hline
+		k=10  & 355+-4        & 344+- 4&356+-13 \\ \hline
 	\end{tabular}
 \end{table}
 graph
