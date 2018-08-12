@@ -232,23 +232,23 @@ This result is closer to what you would expect, the more threads and the bigger 
 \subsection{1D Stencil algorithm}
 
 Another algorithm that was studied individually was 1D Stencil algorithm. It was studied because of its simplicity which make it different from Matrix Multiplication. Here the features <input size> can be renamed <vector size> since the 1D stencil is applied on a vector.
-\subsubsection{Comparison of executions times for all chunk size candidates}
-
+\newpage
 \subsubsection{Function Analysis}
+
 \begin{figure*}[h]
 	\centering
 	\includegraphics[scale=0.8]{images/stencil_function.pdf}
 	\caption{Optimal Chunk Size as a function of features on Stencil algorithm with $CS$ uniform in logscale}
 \end{figure*}
-That result is very interesting because we really see a different behavior than with matrix Multiplication.
+That result is very interesting because we really see a different behavior than with matrix Multiplication. Here the number of threads doesn't seem to have the same impact as Vector size which is the opposite of what was observed previously.
 
-
+\newpage
 \subsection{Data Set with many functions}
 In this section, the focus will be on a bigger data set which is comprised of 278 experiments with many lambda functions. Here is a descriptions of all the functions used:
 
 
 
-\begin{table}[]
+\begin{table}[h]
 	\begin{tabular}{|c|c|c|}
 		\hline
 		\textbf{Name} & \textbf{Description} & \textbf{Numbers of iterations} \\ \hline
