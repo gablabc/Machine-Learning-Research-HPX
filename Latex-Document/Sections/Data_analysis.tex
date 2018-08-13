@@ -1,14 +1,14 @@
 \section{Data Analysis}
 
 \subsection{Matrix Multiplication}
-In this section, I will focus on the Matrix Multiplication algorithm. All experiments shown will have been run with a matrix multiplication lambda function in a HPX $for\_each()$ The goal is to start analyzing a smaller data set before slowly expanding it by adding new lambda functions. In the case of a matrix multiplication algorithm the feature <Input-size> can be renamed <Matrix Size>.
+In this section, we will focus on the Matrix Multiplication algorithm. All experiments shown will have been run with a matrix multiplication lambda function in a HPX $for\_each()$ The goal is to start analyzing a smaller data set before slowly expanding it by adding new lambda functions. In the case of a matrix multiplication algorithm the feature <Input-size> can be renamed <Matrix Size>.
 
 \subsubsection{Variance of execution times for a given chunk-size}
-For a given experiment, you expect to get similar execution times for a given chunk size value every time you run it. There will always be some noise in the data since there are many processes that the user cannot directly control. To correct that, every for-loop is run $N_{rep}$ times and the execution time is given by the mean of these repetitions. Each repetition can be represented by an index $j=0,1,2,3,4,...$.So for an experiment $i$ the execution time outputted is 
-$$\bar{t}_i=\frac{1}{N_{rep}}\sum_{j=1}^{N_{rep}}t_j$$
+For a given experiment, you expect to get similar execution times for a given chunk size value every time you run it. There will always be some noise in the data since there are many processes that the user cannot directly control. To correct that, every for-loop is run $N_\text{rep}$ times and the execution time is given by the mean of these repetitions. Each repetition can be represented by an index $j=0,1,2,3,4, \dots$ So for an experiment $i$ the execution time outputted is 
+$$\bar{t}_i=\frac{1}{N_\text{rep}}\sum_{j=1}^{N_\text{rep}}t_j$$
 Note that the first repetition of the for-loop is ignored so this repetition could be given an index $j=0$. This is done to ignore the time where the cache memory is being filled.
 One would expect the variance of the mean
-to decrease as the number of repetitions get bigger. If this could be confirmed experimentally, this would mean that by taking more and more repetitions, one can get more precise in execution time measurement and therefore the data generation process described earlier can be reliable. Studying the variance is a great tool to measure the variations of execution time between repetitions but it doesn't inform on how much the values vary relative to their size. To solve this issue, the relative variance is used:
+to decrease as the number of repetitions get bigger. If this could be confirmed experimentally, this would mean that by taking more and more repetitions, one can get more precise in execution time measurement and therefore the data generation process described earlier can be reliable. Studying the variance is a great tool to measure the variations of execution time between repetitions but it does not inform on how much the values vary relative to their size. To solve this issue, the relative variance is used:
 $$\operatorname{RelVAR}(\bar{t}_j)=\frac{\operatorname{VAR}(\bar{t}_j)}{\bar{t}_j^2}\times 100 \%$$
 
 To test this assertion, the relative variance of the mean of execution times has been measured for values of $N_{rep}=10,25,50,75,100$. These measurements have been done on matrix multiplications algorithms with different number of threads and different matrix sizes
@@ -18,42 +18,42 @@ To test this assertion, the relative variance of the mean of execution times has
 		\centering
 		\includegraphics[width=\textwidth]{images/relvar_100_2.pdf}
 		\caption[Network2]%
-		{{\small 100x100 on 2 threads}}    
+		{{\small 100$\times$100 on 2 threads}}    
 	\end{subfigure}
 	\hfill
 	\begin{subfigure}[b]{0.475\textwidth}  
 		\centering 
 		\includegraphics[width=\textwidth]{images/relvar_500_2.pdf}
 		\caption[]%
-		{{\small 500x500 on 2 threads}}    
+		{{\small 500$\times$500 on 2 threads}}    
 	\end{subfigure}
 	\vskip\baselineskip
 	\begin{subfigure}[b]{0.475\textwidth}   
 		\centering 
 		\includegraphics[width=\textwidth]{images/relvar_100_4.pdf}
 		\caption[]%
-		{{\small 100x100 on 4 threads}}    
+		{{\small 100$\times$100 on 4 threads}}    
 	\end{subfigure}
 	\quad
 	\begin{subfigure}[b]{0.475\textwidth}   
 		\centering 
 		\includegraphics[width=\textwidth]{images/relvar_500_4.pdf}
 		\caption[]%
-		{{\small 500x500 on 4 threads}}    
+		{{\small 500$\times$500 on 4 threads}}    
 	\end{subfigure}
 	\vskip\baselineskip
 	\begin{subfigure}[b]{0.475\textwidth}   
 		\centering 
 		\includegraphics[width=\textwidth]{images/relvar_100_8.pdf}
 		\caption[]%
-		{{\small 100x100 on 8 threads}}    
+		{{\small 100$\times$100 on 8 threads}}    
 	\end{subfigure}
 	\quad
 	\begin{subfigure}[b]{0.475\textwidth}   
 		\centering 
 		\includegraphics[width=\textwidth]{images/relvar_500_8.pdf}
 		\caption[]%
-		{{\small 500x500 on 8 threads}}    
+		{{\small 500$\times$500 on 8 threads}}    
 \end{subfigure}
 	\caption[Standard deviations]
 	{\small Variances of the mean of execution times for different experiments  and different chunk sizes on Matrix Multiplication algorithm} 
