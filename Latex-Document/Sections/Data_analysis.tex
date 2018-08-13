@@ -140,20 +140,20 @@ This means that of all 6 features, only 2 can be used (Deepest loop level is not
 	\caption{Optimal chunk size as a function of features on Matrix Multiplication algorithm}
 \end{figure}
 
-Figure 5 shows that the number of threads has an impact on optimal chunk size For 100 iterations where we can see a steady decrease of chunk size with respect to number of treads. However for bigger matrices, the function oscillates. These oscillations are caused by the fact that execution times between 0.005 and 0.01 are very close. Here is a table of some execution times to show my point. (Note 0.2 was remove because it was never selected)
+Figure 5 shows that the number of threads has an impact on optimal chunk size For 100 iterations where we can see a steady decrease of chunk size with respect to number of treads. However for bigger matrices, the function oscillates. These oscillations are caused by the fact that execution times between 0.005 and 0.01 are very close. Here is a table of some execution times to show my point. (Note 0.2 was removed because it was never selected)
 
 \begin{table}[h]
 	\centering
 	\caption{Execution times for 5 experiments of Matrix multiplication}
 	\label{my-label}
-	\begin{tabular}{|c|c|c|c|c|}
+	\begin{tabular}{|c|c|c|c|c|c|}
 		\hline
-		0.005& 0.01           & 0.05 & 0.1 & 0.5 \\ \hline
-		0.221386 & 0.219532  & 0.247906    & 0.253246        & 0.629754 \\ \hline
-		0.229569 & 0.229047 & 0.238892   & 0.422549        & 1.02871  \\ \hline
-		0.168765 & 0.166738  & 0.2141   & 0.4157       & 1.0294  \\ \hline
-		0.122448 & 0.121981  & 0.136015    & 0.260424        & 0.709034 \\ \hline
-		0.0179531 & 0.0177467 & 0.0181951  & 0.0337951        & 0.082139 \\ \hline
+		chunk size&0.005& 0.01           & 0.05 & 0.1 & 0.5 \\ \hline
+		experiment 1&0.221386 & 0.219532  & 0.247906    & 0.253246        & 0.629754 \\ \hline
+		experiment 2&0.229569 & 0.229047 & 0.238892   & 0.422549        & 1.02871  \\ \hline
+		experiment 3&0.168765 & 0.166738  & 0.2141   & 0.4157       & 1.0294  \\ \hline
+		experiment 4&0.122448 & 0.121981  & 0.136015    & 0.260424        & 0.709034 \\ \hline
+		experiment 5 &0.0179531 & 0.0177467 & 0.0181951  & 0.0337951        & 0.082139 \\ \hline
 	\end{tabular}
 \end{table}
 
@@ -185,13 +185,13 @@ In figure 6, we still observe oscillations so I decided to examine the execution
 	\centering
 	\caption{Execution times for 1000x1000, 1500x1500, 2000x2000 and 2500x2500 Matrices}
 	\label{my-label}
-	\begin{tabular}{|c|c|c|c|c|c|c|}
+	\begin{tabular}{|c|c|c|c|c|c|c|c|}
 		\hline
-		0.0005  & 0.001   & 0.005   & 0.01    & 0.05    & 0.1     & 0.5     \\ \hline
-		NaN     & 1.06075 & 1.10638 & 1.01317 & 1.13454 & 1.15139 & 3.35216 \\ \hline
-		NaN     & 3.33313 & 3.34309 & 3.33242 & 3.88524 & 3.93604 & 9.56364 \\ \hline
-		7.91752 & 7.84541 & 7.8376  & 7.88513 & 9.22963 & 9.44594 & 22.4268 \\ \hline
-		15.4564 & 15.5674 & 15.4928 & 15.4807 & 18.0824 & 18.2549 & 43.5778 \\ \hline
+		chunk size&0.0005  & 0.001   & 0.005   & 0.01    & 0.05    & 0.1     & 0.5     \\ \hline
+		experiment 1&NaN     & 1.06075 & 1.10638 & 1.01317 & 1.13454 & 1.15139 & 3.35216 \\ \hline
+		experiment 2&NaN     & 3.33313 & 3.34309 & 3.33242 & 3.88524 & 3.93604 & 9.56364 \\ \hline
+		experiment 3&7.91752 & 7.84541 & 7.8376  & 7.88513 & 9.22963 & 9.44594 & 22.4268 \\ \hline
+		experiment 4& 15.4564 & 15.5674 & 15.4928 & 15.4807 & 18.0824 & 18.2549 & 43.5778 \\ \hline
 	\end{tabular}
 \end{table}
 
