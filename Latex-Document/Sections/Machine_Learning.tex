@@ -25,7 +25,7 @@ The 4 regression algorithms that were studied on the matrix multiplication data-
 $$MSE(\hat{f})=\frac{1}{N_\text{test}}\sum_{i=1}^{N_\text{test}}(y_i-\hat{f}(X_i))^2$$
 
 Where $\hat{f}$ represent the regression function which is an approximation of $f$, $X_i$ represent the features for an experiment $i$, $cs_i$ represents the target values and $N_{test}$ represents the number of experiments in the test set. It is important to note that to train regression algorithms, you need target values which are on the same scale. To solve this issue a logarithmic scaling is used on the targets values. This means that the error expressed will be the error of the logarithm. This is very hard to visualize but the goal is to compare models so we simply need to compare the errors. The chunk-size is obtained by applying the exponential function to the result of the regression.
-Here are some results when using the data used to generate  figure [5]. A set of 64 experiments of matrix multiplication with sizes of 100,200,300,400, 500,600,700,800 and 2,4,6,8,10,12,14 threads.$CS=\{0.5;0.125;0.03125;0.0078125;0.001953125\}$
+Here are some results when using the data used to generate  Figure [5]. A set of 64 experiments of matrix multiplication with sizes of 100,200,300,400, 500,600,700,800 and 2,4,6,8,10,12,14 threads.$CS=\{0.5;0.125;0.03125;0.0078125;0.001953125\}$
 
 \begin{table}[h]
 	\centering
@@ -38,7 +38,7 @@ Here are some results when using the data used to generate  figure [5]. A set of
 	\end{tabular}
 \end{table}
 
-By using this metric, we can see that the k-Nearest-Neighbors and the Random Forest are the two best algorithms. I believe this is cause by the fact that these functions are piece-wise constant instead of being continuous like SVR and Neural-Network regression. However, the MSE is not a good metric to understand what happens locally when fitting the data. To better understand what happens locally, a graph of Ydata vs Yprediction can be used. In such graphs, cross validation is once again used but now the prediction are outputted. Each color represent a different test set.
+By using this metric, we can see in Table 5 that the k-Nearest-Neighbors and the Random Forest are the two best algorithms. I believe this is cause by the fact that these functions are piece-wise constant instead of being continuous like SVR and Neural-Network regression. However, the MSE is not a good metric to understand what happens locally when fitting the data. To better understand what happens locally, a graph of Ydata vs Yprediction can be used. In such graphs, cross validation is once again used but now the prediction are outputted. Each color represent a different test set.
 
 \begin{figure}[H]
 	\centering
@@ -52,7 +52,7 @@ By using this metric, we can see that the k-Nearest-Neighbors and the Random For
 	\caption{Random forest predictions vs reality using cross validation with 10 subsets }
 \end{figure}
 
-We can see with these graphs that both algorithms are having similar results. However, calculating the error on chunk size is one thing but how does this error translate to execution time? The following measure I will call $Loop\_Total\_Time()$ will be used:
+We can see in Figure 11 and Figure 12 that both algorithms are having similar results. However, calculating the error on chunk size is one thing but how does this error translate to execution time? The following measure I will call $Loop\_Total\_Time()$ will be used:
 
 $$Loop\_Total\_time(\hat{f})=\sum_{i=0}^{N_{exp}} t(X_i,\hat{f}(X_i))$$
 
@@ -60,7 +60,7 @@ where $i$ represent a given experiment, $\hat{f}(x_i)$ is the predicted chunk si
 
 \begin{table}[h]
 	\centering
-	\caption{Total execution times (s) on hpx for-loops using the predictions of 3 machine learning algorithms using k-fold cross validation}
+	\caption{Total execution times (s) on hpx for-loops using the predictions of 3 machine learning algorithms using k-fold cross validation 10 times and comparing with minimal time obtained by taking the minimum time for each experiment on the data-set}
 	\label{my-label}
 	\begin{tabular}{|c|c|c|c|c|}
 		\hline
@@ -70,7 +70,7 @@ where $i$ represent a given experiment, $\hat{f}(x_i)$ is the predicted chunk si
 	\end{tabular}
 \end{table}
 
-Here we can see that both algorithm regression have similar execution times. In fact, the difference between their execution time is lower than the uncertainty of the measurements and therefore we cannot conclude that one is better. However we can see that they both perform better than the Multinomial Classification. 
+table 6 shows that both algorithm regression have similar execution times. In fact, the difference between their execution time is lower than the uncertainty of the measurements and therefore we cannot conclude that one is better. However we can see that they both perform better than the Multinomial Classification. 
 
 \begin{figure*}[h]
 	\centering
@@ -93,7 +93,7 @@ Here we can see that both algorithm regression have similar execution times. In 
 
 
 
-Resulting from this analysis, it seems that predicts 0.5 on more than 2 threads which never happens with the 2 regressions. This is because the two regressions algorithms take averages in the feature space so they are less likely to predict the highest chunk size 0.5. Predicting 0.5 is very risky because:
+According to Figure 13, it seems that predicts 0.5 on more than 2 threads which never happens with the 2 regressions. This is because the two regressions algorithms take averages in the feature space so they are less likely to predict the highest chunk size 0.5. Predicting 0.5 is very risky because:
 
 $$cs>\frac{1}{\text{number of threads}} \Rightarrow \text{miss-classification error}$$
 
@@ -102,7 +102,7 @@ This miss-classification can be manually corrected after the multinomial classif
 
 \begin{table}[h]
 	\centering
-	\caption{Total execution times (s) on hpx for-loops using the predictions of 3 machine learning algorithms using k-fold cross validation}
+	\caption{Total execution times (s) on hpx for-loops using the predictions of 3 machine learning algorithms using k-fold cross validation 10 times and comparing with minimal time obtained by taking the minimum time for each experiment on the data-set}
 	\label{my-label}
 	\begin{tabular}{|c|c|c|c|c|}
 		\hline
@@ -130,13 +130,13 @@ This miss-classification can be manually corrected after the multinomial classif
 	
 \end{figure*}
 
-Here we can note that by manually reducing the aberrant chunk sizes has improved performances but we can still see that the classification has  a longer execution times in some instances. These instance happen to be the ones where the chunk size was manually reduced. However, it cannot be manually reduced any further because we don't know what is the best chunk size. The time difference for these errors is now smaller It is important to note that the color blue is not significant in this graph since its magnitude is around the variance of the data. This can be said because there are blue dots on the doted-line.
+According to Table 7 and Figure 14, we can note that by manually reducing the aberrant chunk sizes has improved performances but we can still see that the classification has  a longer execution times in some instances. These instance happen to be the ones where the chunk size was manually reduced. However, it cannot be manually reduced any further because we don't know what is the best chunk size. The time difference for these errors is now smaller It is important to note that the color blue is not significant in this graph since its magnitude is around the variance of the data. This can be said because there are blue dots on the doted-line.
 \subsection{1D stencil algorithm}
 For this function, the multinomial corrected algorithm is compared to the two other regressions:
 
 \begin{table}[h]
 	\centering
-	\caption{Total execution times (s) on hpx for-loops using the predictions of 3 machine learning algorithms with stencil function using k-fold cross validation}
+	\caption{Total execution times (s) on hpx for-loops using the predictions of 3 machine learning algorithms with stencil function using k-fold cross validation 10 times and comparing with minimal time obtained by taking the minimum time for each experiment on the data-set}
 	\label{my-label}
 	\begin{tabular}{|c|c|c|c|c|}
 		\hline
@@ -161,13 +161,15 @@ For this function, the multinomial corrected algorithm is compared to the two ot
 	\end{subfigure}
 	\caption{Chunk sizes predicted by 3 machine-learning algorithms on Stencil functions (a) and the resulting Execution times measured on hpx for-loops (b)} 
 \end{figure*}
+
+Table 8 and Figure 15 both show that Mutinomial CLassification has the bigger total execution times on hpx for-loops.
 \subsection{Data Set with multiple functions}
 
 On this data set, the Mean Square Error has once again been measured on the 2 selected regressions:
 
 \begin{table}[h]
 	\centering
-	\caption{Mean Squared Error on 278 experiments with logarithmic scaling on $CS$ using k-fold cross validation}
+	\caption{Mean Squared Error on 278 experiments with logarithmic scaling on the chunk sizes candidates using k-fold cross validation 10 times}
 	\label{my-label}
 	\begin{tabular}{|c|c|c|}
 		\hline
@@ -187,7 +189,7 @@ On this data set, the Mean Square Error has once again been measured on the 2 se
 	\caption{Evaluation of random forest}
 \end{figure}
 
-The number of neighbors has been set to 2 because it was the value that minimized the MSE. However it is still quite big for k-Nearest-Neighbors relative to Random Forest. I believe it performs worse in that scenario because of the prepossessing on the big data set. In fact not normalizing the features gave a MSE of 1.67. It is normal that kNN is sensible to preprocessing and not RandomForest because it calculates Euclidean distance between points in the feature space. However I have decided to normalize the data nonetheless because the features are on different scales. The exact reason why kNN performs better without normalization could be studied on its own.
+Table 9 shows that k-Nearest-Neighbors has a bigger time on hpx for-loops than Random Forest. I believe it performs worse in that scenario because of the prepossessing on the big data set. In fact not normalizing the features gave a MSE of 1.67. It is normal that kNN is sensible to preprocessing and not RandomForest because it calculates Euclidean distance between points in the feature space. However I have decided to normalize the data nonetheless because the features are on different scales. The exact reason why kNN performs better without normalization could be studied on its own.
 \\
 
 Now let's see how this error in prediction relates to execution times. Once again the regressions are compared to Multinomial Classification:
@@ -195,7 +197,7 @@ Now let's see how this error in prediction relates to execution times. Once agai
 
 \begin{table}[h]
 	\centering
-	\caption{Total execution times (s) on hpx for-loops with the predictions of 3 machine learning algorithms on 278 experiments using k-fold cross validation}
+	\caption{Total execution times (s) on hpx for-loops with the predictions of 3 machine learning algorithms on 278 experiments using k-fold cross validation 10 times and comparing with minimal time obtained by taking the minimum time for each experiment on the data-set}
 	\label{my-label}
 	\begin{tabular}{|c|c|c|c|c|}
 		\hline
@@ -205,11 +207,11 @@ Now let's see how this error in prediction relates to execution times. Once agai
 	\end{tabular}
 \end{table}
 
-Like all previous results, multinomial classification is worst than the other algorithms. At it point in the project, it was discovered that there was no use of bias inside the multinomial model. The algorithms requires the computation of a linear function $W X$ where $W$ represents the weights which are parameters that need to be optimizes. Adding a bias consist of changing this function to an affine function $WX+b$ where $b$ is called the bias. Let's see how adding a bias improves the results:
+Like all previous results, Table 10 shows that multinomial classification is worst than the other algorithms. At it point in the project, it was discovered that there was no use of bias inside the multinomial model. The algorithms requires the computation of a linear function $W X$ where $W$ represents the weights which are parameters that need to be optimizes. Adding a bias consist of changing this function to an affine function $WX+b$ where $b$ is called the bias. Let's see how adding a bias improves the results:
 
 \begin{table}[h]
 	\centering
-	\caption{Total execution times (s) on hpx for-loops with the predictions of 3 machine learning algorithms on 278 experiments using k-fold cross validation}
+	\caption{Total execution times (s) on hpx for-loops with the predictions of 3 machine learning algorithms on 278 experiments using k-fold cross validation 10 times and comparing with minimal time obtained by taking the minimum time for each experiment on the data-set}
 	\label{my-label}
 	\begin{tabular}{|c|c|c|c|c|}
 		\hline
@@ -218,13 +220,13 @@ Like all previous results, multinomial classification is worst than the other al
 		355$\pm$4        & 344$\pm$ 4&341$\pm$4 \\ \hline
 	\end{tabular}
 \end{table}
-We can see that simply adding a bias to the algorithm reduced the execution time on hpx loops by a huge factor. It has now become the best algorithm on the big data set. It may the best on all experiments, but it's still interesting to study the results on each type of function to see if it performs better on all lambda functions:
+In Table 11, we can see that simply adding a bias to the algorithm reduced the execution time on hpx loops by a huge factor. It has now become the best algorithm on the big data set. It may the best on all experiments, but it's still interesting to study the results on each type of function to see if it performs better on all lambda functions:
 \newpage
 \subsubsection{Nothing}
 
 \begin{table}[h]
 	\centering
-	\caption{Total execution times (s) on hpx for-loops with the predictions of 3 machine learning algorithms on Nothing function using k-fold cross validation}
+	\caption{Total execution times (s) on hpx for-loops with the predictions of 3 machine learning algorithms on Nothing function using k-fold cross validation 10 times and comparing with minimal time obtained by taking the minimum time for each experiment on the data-set}
 	\label{my-label}
 	\begin{tabular}{|c|c|c|c|c|}
 		\hline
@@ -251,13 +253,13 @@ We can see that simply adding a bias to the algorithm reduced the execution time
 	\end{subfigure}
 	\caption{Chunk sizes predicted by 3 machine-learning algorithms on Nothing functions (a) and the resulting Execution times measured on hpx for-loops (b)} 	
 \end{figure*}
-The results for the 3 algorithms are very close but Random Forest predicted 0.5 on 4 threads which and add a bigger execution time as a result. It is interesting to see that Multinomial Classification always predicts the smallest chunk size. This is because the execution times between $\frac{1}{512}$ and $\frac{1}{128}$ are very close so the algorithm converged too early. This didn't seem to affect that much the total time measured on hpx for-loops.
+Table 12 and Figure 18 show that the results for the 3 algorithms are very close but Random Forest predicted 0.5 on 4 threads which and add a bigger execution time as a result. It is interesting to see that Multinomial Classification always predicts the smallest chunk size. This is because the execution times between $\frac{1}{512}$ and $\frac{1}{128}$ are very close so the algorithm converged too early. This didn't seem to affect that much the total time measured on hpx for-loops.
 \newpage
 \subsubsection{Swap}
 
 \begin{table}[H]
 	\centering
-	\caption{Total execution times (s) on hpx for-loops with the predictions of 3 machine learning algorithms on Swap function using k-fold cross validation}
+	\caption{Total execution times (s) on hpx for-loops with the predictions of 3 machine learning algorithms on Swap function using k-fold cross validation 10 times and comparing with minimal time obtained by taking the minimum time for each experiment on the data-set}
 	\label{my-label}
 	\begin{tabular}{|c|c|c|c|c|}
 		\hline
@@ -284,13 +286,13 @@ The results for the 3 algorithms are very close but Random Forest predicted 0.5 
 	\end{subfigure}
 	\caption{Chunk sizes predicted by 3 machine-learning algorithms on Swap functions (a) and the resulting Execution times measured on hpx for-loops (b)} 
 \end{figure*}
-Here the times are so close relative to the variance of measurement that it is hard to have conclusions based on these graphs but it seems that the Multinomial algorithm performs worse because it predicts too small chunk sizes which means we observe the overhead of splitting the job.
+Table 13 and Figure 19 show that times are so close relative to the variance of measurement that it is hard to have conclusions based on these graphs but it seems that the Multinomial algorithm performs worse because it predicts too small chunk sizes which means we observe the overhead of splitting the job.
 \newpage
 \subsubsection{Matrix-Vector multiplication}
 
 \begin{table}[h]
 	\centering
-	\caption{Total execution times (s) on hpx for-loops with the predictions of 3 machine learning algorithms on Matrix-Vector multiplication function using k-fold cross validation}
+	\caption{Total execution times (s) on hpx for-loops with the predictions of 3 machine learning algorithms on Matrix-Vector multiplication function using k-fold cross validation 10 times and comparing with minimal time obtained by taking the minimum time for each experiment on the data-set}
 	\label{my-label}
 	\begin{tabular}{|c|c|c|c|c|}
 		\hline
@@ -317,13 +319,13 @@ Here the times are so close relative to the variance of measurement that it is h
 	\end{subfigure}
 	\caption{Chunk sizes predicted by 3 machine-learning algorithms on Matrix-Vector multiplication functions (a)and the resulting Execution times measured on hpx for-loops (b)} 
 \end{figure*}
-here the times differences are mainly caused by variance because we see multiple instances where the predictions are all the same for 3 algorithms but we observe a difference in execution time.
+Table 14 and Figure 20 show that times differences are mainly caused by variance because we see multiple instances where the predictions are all the same for 3 algorithms but we observe a difference in execution time.
 
 \newpage
 \subsubsection{Matrix-matrix multiplication}
 \begin{table}[h]
 	\centering
-	\caption{Total execution times (s) on hpx for-loops with the predictions of 3 machine learning algorithms on Matrix-Matrix multiplication using k-fold cross validation}
+	\caption{Total execution times (s) on hpx for-loops with the predictions of 3 machine learning algorithms on Matrix-Matrix multiplication using k-fold cross validation 10 times and comparing with minimal time obtained by taking the minimum time for each experiment on the data-set}
 	\label{my-label}
 	\begin{tabular}{|c|c|c|c|c|}
 		\hline
@@ -350,12 +352,13 @@ here the times differences are mainly caused by variance because we see multiple
 	\end{subfigure}
 	\caption{Chunk sizes predicted by 3 machine-learning algorithms on Matrix-Matrix multiplication functions (a) and the resulting Execution times measured on hpx for-loops (b)} 
 \end{figure*}
-We can see that for this function, multinomial algorithm is way better than the other two. 
+
+Table 15 and Figure 21 show that for this function, multinomial algorithm is better than the other two. 
 \newpage
 \subsubsection{Max}
 \begin{table}[h]
 	\centering
-	\caption{Total execution times (s) on hpx for-loops with the predictions of 3 machine learning algorithms on Max using k-fold cross validation}
+	\caption{Total execution times (s) on hpx for-loops with the predictions of 3 machine learning algorithms on Max using k-fold cross validation 10 times and comparing with minimal time obtained by taking the minimum time for each experiment on the data-set}
 	\label{my-label}
 	\begin{tabular}{|c|c|c|c|c|}
 		\hline
@@ -382,12 +385,12 @@ We can see that for this function, multinomial algorithm is way better than the 
 	\end{subfigure}
 	\caption{Chunk sizes predicted by 3 machine-learning algorithms on Max functions (a) and the resulting Execution times measured on hpx for-loops (b)} 
 \end{figure*}
-Once again we can see that multinomial only predicts small chunk sizes while other algorithms are more nuanced. This doesn't seem to affect execution time that much .
+Table 16 and Figure 22 show that multinomial only predicts small chunk sizes while other algorithms are more nuanced. This doesn't seem to affect execution time that much .
 \newpage
 \subsubsection{Tensor Generator}
 \begin{table}[h]
 	\centering
-	\caption{Total execution times (s) on hpx for-loops with the predictions of 3 machine learning algorithms on Tensor generator function using k-fold cross validation}
+	\caption{Total execution times (s) on hpx for-loops with the predictions of 3 machine learning algorithms on Tensor generator function using k-fold cross validation 10 times and comparing with minimal time obtained by taking the minimum time for each experiment on the data-set}
 	\label{my-label}
 	\begin{tabular}{|c|c|c|c|c|}
 		\hline
@@ -414,4 +417,4 @@ Once again we can see that multinomial only predicts small chunk sizes while oth
 	\end{subfigure}
 	\caption{Chunk sizes predicted by 3 machine-learning algorithms on Tensor Generator functions (a) and the resulting Execution times measured on hpx for-loops (b)} 
 \end{figure*}
-Here we can see that Random Forest and Multinomial, despite differences in predictions,both have the same time.
+Table 17 and Figure 23 show that Random Forest and Multinomial, despite differences in predictions,both have the same time.
