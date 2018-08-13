@@ -231,7 +231,9 @@ that result is very encouraging, We can see some reduction of the oscillations. 
 This result is closer to what you would expect, the more threads and the bigger the Matrix, the more advantageous it becomes to split your job in many chunks. There is still some noise but it is unavoidable at this point. At least we can reduce it by changing the set of candidates.
 \subsection{1D Stencil algorithm}
 
-Another algorithm that was studied individually was 1D Stencil algorithm. It was studied because of its simplicity which make it different from Matrix Multiplication. Here the features <input size> can be renamed <vector size> since the 1D stencil is applied on a vector.
+Another algorithm that was studied individually was 1D Stencil algorithm. It was studied because of its simplicity which make it different from Matrix Multiplication. In the stencil algorithms, you have a vector $\vec{x} \in \mathbb{R}^N$ and you apply $x_i=0.5*x_{i-1}+x_i+0,5*x_{i+1}$ for all elements. To make this algorihm parallelizable, the output must be stored in a new vector.
+
+Here the features <input size> can be renamed <vector size> since the 1D stencil is applied on a vector.
 \newpage
 \subsubsection{Function Analysis}
 

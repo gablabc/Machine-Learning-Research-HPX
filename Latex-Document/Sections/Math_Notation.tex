@@ -6,7 +6,7 @@ The ultimate goal of this research is to minimize the execution time of a parall
 	\includegraphics[scale=0.8]{images/for_each_call.pdf}
 \end{figure*}
 
-In such loops, a lambda function is applied over a range. The lambda function could be any algorithm such as,for instance, matrix multiplication. Each instance of a loop being run will be referred to as an experiment. Each experiment has an unique set of features which will be called $X_i$ for the $i$th experiment. The following six features are used:
+In such loops, a lambda function is applied over a range. The lambda function could be any algorithm such as, for instance, matrix multiplication. Each instance of a loop being run will be referred to as an experiment. Each experiment has an unique set of features which will be called $X_i$ for the $i$th experiment. The following six features are used:
 
 \begin{itemize}
 	\item[1] <Total Number of operations per iteration>
@@ -17,7 +17,7 @@ In such loops, a lambda function is applied over a range. The lambda function co
 	\item[6] <Number of threads>
 \end{itemize}
 
-The first four features will considered static since they only depend on the lambda function internal structure. They are collected at compile time by a ClangTool called loop convert.
+The first four features will be considered static since they only depend on the lambda function internal structure. They are collected at compile time by a ClangTool called loop convert.
 
 The last two are dynamic since they do not depend on the algorithm and are extracted at run-time.
 
@@ -29,14 +29,10 @@ $\otimes$ is a tensorial product which means that time is a function of both fea
 Our ultimate goal is to find the chunk size that minimizes the execution times for a given set of features. This means that we want to find the function:
 
 \begin{equation}
-	f(X_i)=cs_i
-\end{equation}
- where
-\begin{equation}
- cs_i=\underset{cs \in CS}{\arg\min} \, \, t(X_i,cs)
+	f(X_i)=\underset{cs \in CS}{\arg\min} \, \, t(X_i,cs)=cs_i
 \end{equation}
 
 
 The  value $cs_i$ is known as the optimal chunk size as it minimizes the execution time for experiment $i$. $f$ is the function that outputs the optimal chunk size of a given loop. Optimal chunk sizes will be referred to as target values which is the vocabulary used in machine learning for values that we want to predict.
 
-The objective is to use machine-learning algorithms to approximate the function f (1) and (2).
+The objective is to use machine-learning algorithms to approximate the function f (1).
